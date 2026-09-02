@@ -1,0 +1,6 @@
+{
+  "name": "xs-vietlott-lab",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": { "build": "mkdir -p dist && cp index.html styles.css app.js dist/" }
+}
