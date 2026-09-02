@@ -4,6 +4,15 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Phân tích thống kê và kiểm định dự báo Vietlott minh bạch.">
   <title>XS Vietlott Lab</title><link rel="stylesheet" href="styles.css">
+  <style>
+    .legend .cold{background:#bfe2f7}.legend .normal{background:#eceee9}.legend .hot{background:#e75045}
+    .band:nth-child(odd) i{background:linear-gradient(180deg,#ef6658,#ffb08e)}.band:nth-child(even) i{background:linear-gradient(180deg,#4da9da,#bfe5f5)}
+    .ticket{display:grid;grid-template-columns:30px 1fr auto;gap:12px}.why-btn{border:0;background:#edf5f1;color:var(--green);font-size:12px;font-weight:750;border-radius:8px;padding:8px;cursor:pointer}.why-btn:hover{background:#dcece5}
+    .explain-box{margin-top:16px;border:1px solid #cddfd9;background:#f4faf7;border-radius:14px;padding:15px}.explain-head{display:flex;gap:11px;align-items:flex-start}.explain-head>span{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:white;font-family:Georgia,serif;font-style:italic}.explain-head p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+    .explain-detail{display:none;border-top:1px solid #d7e7e1;margin-top:13px;padding-top:13px}.explain-detail.show{display:block}.reason-row{display:flex;gap:8px;flex-wrap:wrap}.reason-chip{background:white;border:1px solid var(--line);border-radius:16px;padding:6px 9px;font-size:12px}.reason-chip b{color:var(--green)}
+    .history-card{grid-template-columns:150px 1fr 150px auto}.delete-btn{width:38px;height:38px;border-radius:9px;border:1px solid #f0c5bf;background:#fff5f3;color:#c13e32;cursor:pointer;font-size:18px}.delete-btn:hover{background:#ffe4df}
+    @media(max-width:560px){.ticket{grid-template-columns:26px 1fr}.why-btn{grid-column:2;width:max-content}.history-card{grid-template-columns:1fr}.delete-btn{justify-self:end}}
+  </style>
 </head>
 <body>
 <header class="topbar">
@@ -29,7 +38,7 @@
       <article class="metric accent"><span>ĐỘ TIN CẬY DỮ LIỆU</span><strong id="quality">—</strong><small>kiểm tra hợp lệ & trùng kỳ</small></article>
     </div>
     <div class="grid-main">
-      <article class="panel heat-panel"><div class="panel-head"><div><p class="kicker">BẢN ĐỒ TẦN SUẤT</p><h2>Nhịp xuất hiện của từng số</h2></div><div class="legend"><span><i class="cold"></i>Thấp</span><span><i class="hot"></i>Cao</span></div></div><div id="heatmap" class="heatmap"></div></article>
+      <article class="panel heat-panel"><div class="panel-head"><div><p class="kicker">BẢN ĐỒ TẦN SUẤT</p><h2>Nhịp xuất hiện của từng số</h2></div><div class="legend"><span><i class="cold"></i>Ít</span><span><i class="normal"></i>Bình thường</span><span><i class="hot"></i>Nhiều</span></div></div><div id="heatmap" class="heatmap"></div></article>
       <article class="panel shortlist"><p class="kicker">TÍN HIỆU HIỆN TẠI</p><h2>Nổi bật trong 100 kỳ</h2><div class="signal"><span>Nóng</span><div id="hotNums" class="balls small"></div></div><div class="signal"><span>Lạnh</span><div id="coldNums" class="balls small pale"></div></div><div class="signal"><span>Quá hạn</span><div id="dueNums" class="balls small outline"></div></div><p class="note">Tần suất quá khứ không làm thay đổi xác suất toán học của kỳ tiếp theo.</p></article>
     </div>
     <div class="lower-grid">
@@ -46,7 +55,7 @@
         <label>Số bộ dự báo<input id="ticketCount" type="range" min="1" max="10" value="5"><span id="ticketValue">5 bộ</span></label>
         <button id="generate" class="primary">Tạo dự báo mới <span>→</span></button>
       </article>
-      <article class="panel result"><div class="panel-head"><div><p class="kicker">KẾT QUẢ ĐỀ XUẤT</p><h2 id="resultTitle">Mega 6/45 · 5 bộ</h2></div><span class="tag">CHƯA LƯU</span></div><div id="tickets" class="tickets"></div><div class="result-actions"><button id="regenerate" class="secondary">↻ Tạo lại</button><button id="save" class="primary">Lưu dự báo</button></div><p class="note">Dự báo được tạo từ mô tả thống kê, không phải cam kết hoặc lời khuyên tài chính.</p></article>
+      <article class="panel result"><div class="panel-head"><div><p class="kicker">KẾT QUẢ ĐỀ XUẤT</p><h2 id="resultTitle">Mega 6/45 · 5 bộ</h2></div><span class="tag">CHƯA LƯU</span></div><div id="tickets" class="tickets"></div><div class="explain-box"><div class="explain-head"><span>i</span><div><b>Cách đọc lý do lựa chọn</b><p>Mỗi bộ được cân bằng theo tổng, chẵn/lẻ và độ phủ khoảng. Nhấn “Vì sao?” để xem tín hiệu của từng con số.</p></div></div><div id="explainDetail" class="explain-detail"></div></div><div class="result-actions"><button id="regenerate" class="secondary">↻ Tạo lại</button><button id="save" class="primary">Lưu dự báo</button></div><p class="note">Dự báo được tạo từ mô tả thống kê, không phải cam kết hoặc lời khuyên tài chính.</p></article>
     </div>
   </section>
 
