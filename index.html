@@ -11,7 +11,8 @@
     .explain-box{margin-top:16px;border:1px solid #cddfd9;background:#f4faf7;border-radius:14px;padding:15px}.explain-head{display:flex;gap:11px;align-items:flex-start}.explain-head>span{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:white;font-family:Georgia,serif;font-style:italic}.explain-head p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
     .explain-detail{display:none;border-top:1px solid #d7e7e1;margin-top:13px;padding-top:13px}.explain-detail.show{display:block}.reason-row{display:flex;gap:8px;flex-wrap:wrap}.reason-chip{background:white;border:1px solid var(--line);border-radius:16px;padding:6px 9px;font-size:12px}.reason-chip b{color:var(--green)}
     .history-card{grid-template-columns:150px 1fr 150px auto}.delete-btn{width:38px;height:38px;border-radius:9px;border:1px solid #f0c5bf;background:#fff5f3;color:#c13e32;cursor:pointer;font-size:18px}.delete-btn:hover{background:#ffe4df}
-    @media(max-width:560px){.ticket{grid-template-columns:26px 1fr}.why-btn{grid-column:2;width:max-content}.history-card{grid-template-columns:1fr}.delete-btn{justify-self:end}}
+    .deep-grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:12px;margin-top:12px}.rank-list,.pair-list{display:grid;gap:8px}.rank-item,.pair-item{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;background:#f5f7f4;border-radius:10px;padding:9px 11px}.rank-item .mini-bar{height:6px;background:#dde5e0;border-radius:4px;overflow:hidden}.rank-item .mini-bar i{display:block;height:100%;background:linear-gradient(90deg,#56a9d2,#e75a4d);border-radius:4px}.delta.up{color:#d7483d}.delta.down{color:#348ab4}.pair-balls{display:flex;gap:5px}.pair-balls i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:white;font-style:normal;font-size:12px;font-weight:700}.shape-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}.shape-card{background:#f5f7f4;border-radius:11px;padding:13px}.shape-card b{display:block;font-family:Georgia,serif;font-size:25px}.shape-card span{color:var(--muted);font-size:11px}.history-actions{display:flex;align-items:center;gap:8px}.match-badge{display:inline-block;margin-top:7px;border-radius:8px;background:#e8f5ee;color:#147352;padding:6px 8px;font-size:12px;font-weight:700}
+    @media(max-width:900px){.deep-grid{grid-template-columns:1fr}.history-actions{align-items:flex-end;flex-direction:column}}@media(max-width:560px){.ticket{grid-template-columns:26px 1fr}.why-btn{grid-column:2;width:max-content}.history-card{grid-template-columns:1fr}.delete-btn{justify-self:end}}
   </style>
 </head>
 <body>
@@ -43,7 +44,12 @@
     </div>
     <div class="lower-grid">
       <article class="panel"><p class="kicker">CẤU TRÚC DÃY SỐ</p><h2>Phân bố theo khoảng</h2><div id="bands" class="bands"></div></article>
-      <article class="panel"><p class="kicker">KIỂM ĐỊNH WALK-FORWARD</p><h2>So với chọn ngẫu nhiên</h2><div class="backtest"><div><b>1,42</b><span>Số trùng TB / bộ</span></div><div><b>1,37</b><span>Mốc ngẫu nhiên</span></div><div><b class="neutral">+0,05</b><span>Chênh lệch mẫu</span></div></div><p class="note">Số liệu minh họa giao diện; backtest thật sẽ được tính lại sau khi đồng bộ đủ lịch sử.</p></article>
+      <article class="panel"><p class="kicker">KIỂM ĐỊNH WALK-FORWARD</p><h2>So với chọn ngẫu nhiên</h2><div class="backtest"><div><b id="modelHits">—</b><span>Số trùng TB / bộ</span></div><div><b id="randomHits">—</b><span>Mốc ngẫu nhiên</span></div><div><b id="liftValue" class="neutral">—</b><span>Chênh lệch mẫu</span></div></div><p class="note" id="backtestNote">Đang kiểm định tuần tự trên dữ liệu đã đồng bộ.</p></article>
+    </div>
+    <div class="deep-grid">
+      <article class="panel"><p class="kicker">XU HƯỚNG 50–50</p><h2>Thay đổi nhịp xuất hiện</h2><div id="trendList" class="rank-list"></div></article>
+      <article class="panel"><p class="kicker">ĐỒNG XUẤT HIỆN</p><h2>Cặp số nổi bật</h2><div id="pairList" class="pair-list"></div><p class="note">Điểm cặp được hiệu chỉnh theo tần suất riêng, tránh ưu tiên cặp chỉ vì từng số vốn xuất hiện nhiều.</p></article>
+      <article class="panel"><p class="kicker">KHOẢNG CÁCH & ĐỘ TRẢI</p><h2>Hình dáng bộ số</h2><div id="shapeStats" class="shape-stats"></div></article>
     </div>
   </section>
 
@@ -59,7 +65,7 @@
     </div>
   </section>
 
-  <section id="history" class="view"><article class="panel"><div class="panel-head"><div><p class="kicker">NHẬT KÝ BẤT BIẾN</p><h2>Dự báo đã lưu</h2></div><button id="clearHistory" class="text-btn">Xóa dữ liệu thử</button></div><div id="historyList" class="history-list"></div></article></section>
+  <section id="history" class="view"><article class="panel"><div class="panel-head"><div><p class="kicker">NHẬT KÝ KIỂM CHỨNG</p><h2>Dự báo đã lưu</h2></div><div class="history-actions"><button id="compareLatest" class="secondary">Đối chiếu kỳ mới nhất</button><button id="clearHistory" class="text-btn">Xóa dữ liệu thử</button></div></div><div id="historyList" class="history-list"></div></article></section>
 </main>
 <footer><span>XS Vietlott Lab · Bản kiểm duyệt 0.1</span><span>Phân tích để hiểu dữ liệu — không bảo đảm trúng thưởng.</span></footer>
 <div id="toast" class="toast">Đã lưu dự báo thành công</div>
