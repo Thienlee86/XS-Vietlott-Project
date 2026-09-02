@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Phân tích thống kê và kiểm định dự báo Vietlott minh bạch.">
+  <title>XS Vietlott Lab</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#"><span class="mark">X</span><span>XS Vietlott <b>Lab</b></span></a>
+  <nav><button class="nav active" data-view="overview">Tổng quan</button><button class="nav" data-view="forecast">Tạo dự báo</button><button class="nav" data-view="history">Lịch sử</button></nav>
+  <span class="data-status" id="dataStatus"><i></i> Đang nạp dữ liệu</span>
+</header>
+<main>
+  <section class="hero">
+    <div><p class="eyebrow">PHÒNG THÍ NGHIỆM XÁC SUẤT</p><h1>Nhìn dữ liệu rõ hơn.<br><em>Dự báo có kiểm chứng.</em></h1><p class="intro">Phân tích 100 kỳ gần nhất, tạo danh mục bộ số và lưu lại để đối chiếu công bằng sau kỳ quay.</p></div>
+    <div class="game-switch" role="tablist">
+      <button class="game active" data-game="645"><span>MEGA</span><b>6/45</b></button>
+      <button class="game" data-game="655"><span>POWER</span><b>6/55</b></button>
+      <button class="game" data-game="535"><span>LOTTO</span><b>5/35</b></button>
+    </div>
+  </section>
+
+  <section id="overview" class="view active-view">
+    <div class="metric-row">
+      <article class="metric"><span>CỬA SỔ PHÂN TÍCH</span><strong>100</strong><small>kỳ quay gần nhất</small></article>
+      <article class="metric"><span>TỔNG TRUNG BÌNH</span><strong id="avgSum">—</strong><small id="sumRange">đang tính toán</small></article>
+      <article class="metric"><span>MẪU CHẴN / LẺ</span><strong id="oddEven">—</strong><small>xuất hiện nhiều nhất</small></article>
+      <article class="metric accent"><span>ĐỘ TIN CẬY DỮ LIỆU</span><strong id="quality">—</strong><small>kiểm tra hợp lệ & trùng kỳ</small></article>
+    </div>
+    <div class="grid-main">
+      <article class="panel heat-panel"><div class="panel-head"><div><p class="kicker">BẢN ĐỒ TẦN SUẤT</p><h2>Nhịp xuất hiện của từng số</h2></div><div class="legend"><span><i class="cold"></i>Thấp</span><span><i class="hot"></i>Cao</span></div></div><div id="heatmap" class="heatmap"></div></article>
+      <article class="panel shortlist"><p class="kicker">TÍN HIỆU HIỆN TẠI</p><h2>Nổi bật trong 100 kỳ</h2><div class="signal"><span>Nóng</span><div id="hotNums" class="balls small"></div></div><div class="signal"><span>Lạnh</span><div id="coldNums" class="balls small pale"></div></div><div class="signal"><span>Quá hạn</span><div id="dueNums" class="balls small outline"></div></div><p class="note">Tần suất quá khứ không làm thay đổi xác suất toán học của kỳ tiếp theo.</p></article>
+    </div>
+    <div class="lower-grid">
+      <article class="panel"><p class="kicker">CẤU TRÚC DÃY SỐ</p><h2>Phân bố theo khoảng</h2><div id="bands" class="bands"></div></article>
+      <article class="panel"><p class="kicker">KIỂM ĐỊNH WALK-FORWARD</p><h2>So với chọn ngẫu nhiên</h2><div class="backtest"><div><b>1,42</b><span>Số trùng TB / bộ</span></div><div><b>1,37</b><span>Mốc ngẫu nhiên</span></div><div><b class="neutral">+0,05</b><span>Chênh lệch mẫu</span></div></div><p class="note">Số liệu minh họa giao diện; backtest thật sẽ được tính lại sau khi đồng bộ đủ lịch sử.</p></article>
+    </div>
+  </section>
+
+  <section id="forecast" class="view">
+    <div class="forecast-grid">
+      <article class="panel controls"><p class="kicker">TẠO DANH MỤC DỰ BÁO</p><h2>Thiết lập chiến lược</h2>
+        <label>Số kỳ phân tích<select id="window"><option>30</option><option>50</option><option selected>100</option><option>200</option></select></label>
+        <label>Chiến lược<select id="strategy"><option value="ensemble">Tổng hợp cân bằng</option><option value="frequency">Tần suất có trọng số</option><option value="hotcold">Nóng – lạnh cân bằng</option><option value="overdue">Ưu tiên quá hạn</option><option value="random">Ngẫu nhiên đối chứng</option></select></label>
+        <label>Số bộ dự báo<input id="ticketCount" type="range" min="1" max="10" value="5"><span id="ticketValue">5 bộ</span></label>
+        <button id="generate" class="primary">Tạo dự báo mới <span>→</span></button>
+      </article>
+      <article class="panel result"><div class="panel-head"><div><p class="kicker">KẾT QUẢ ĐỀ XUẤT</p><h2 id="resultTitle">Mega 6/45 · 5 bộ</h2></div><span class="tag">CHƯA LƯU</span></div><div id="tickets" class="tickets"></div><div class="result-actions"><button id="regenerate" class="secondary">↻ Tạo lại</button><button id="save" class="primary">Lưu dự báo</button></div><p class="note">Dự báo được tạo từ mô tả thống kê, không phải cam kết hoặc lời khuyên tài chính.</p></article>
+    </div>
+  </section>
+
+  <section id="history" class="view"><article class="panel"><div class="panel-head"><div><p class="kicker">NHẬT KÝ BẤT BIẾN</p><h2>Dự báo đã lưu</h2></div><button id="clearHistory" class="text-btn">Xóa dữ liệu thử</button></div><div id="historyList" class="history-list"></div></article></section>
+</main>
+<footer><span>XS Vietlott Lab · Bản kiểm duyệt 0.1</span><span>Phân tích để hiểu dữ liệu — không bảo đảm trúng thưởng.</span></footer>
+<div id="toast" class="toast">Đã lưu dự báo thành công</div>
+<script src="app.js"></script>
+</body></html>
