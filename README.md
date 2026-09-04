@@ -4,7 +4,8 @@ Bản kiểm duyệt ứng dụng phân tích thống kê cho Mega 6/45, Power 6
 
 ## V1 · Forward Test 01
 
-- Đồng bộ dữ liệu JSONL công khai từ `vietvudanh/vietlott-data`, tự chuyển sang dữ liệu mô phỏng khi nguồn không tải được.
+- Đồng bộ hai nguồn dữ liệu cộng đồng, bổ sung bản ghi mới nhất từ kho đối chiếu với Vietlott và bỏ qua bộ nhớ đệm của trình duyệt.
+- Tự kiểm tra dữ liệu khi mở lại app, khi quay về từ màn hình nền và mỗi 5 phút trong lúc app đang mở.
 - Phân tích 100 kỳ: tần suất, nóng/lạnh/quá hạn, tổng, chẵn/lẻ và phân bố theo khoảng.
 - Giao thức V1 cố định: cửa sổ 100 kỳ, chiến lược tổng hợp cân bằng và 5 bộ dự báo mỗi kỳ.
 - Khi lưu, hệ thống khóa thêm 15 bộ đối chứng cùng thời điểm: random đều, random có cấu trúc và chọn theo tần suất.
