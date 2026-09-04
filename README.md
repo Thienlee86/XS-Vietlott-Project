@@ -6,6 +6,7 @@ Bản kiểm duyệt ứng dụng phân tích thống kê cho Mega 6/45, Power 6
 
 - Đồng bộ hai nguồn dữ liệu cộng đồng, bổ sung bản ghi mới nhất từ kho đối chiếu với Vietlott và bỏ qua bộ nhớ đệm của trình duyệt.
 - Tự kiểm tra dữ liệu khi mở lại app, khi quay về từ màn hình nền và mỗi 5 phút trong lúc app đang mở.
+- Mỗi dự báo được gắn với ngày quay mục tiêu; chỉ kết quả đúng ngày đó mới được phép đối chiếu.
 - Phân tích 100 kỳ: tần suất, nóng/lạnh/quá hạn, tổng, chẵn/lẻ và phân bố theo khoảng.
 - Giao thức V1 cố định: cửa sổ 100 kỳ, chiến lược tổng hợp cân bằng và 5 bộ dự báo mỗi kỳ.
 - Khi lưu, hệ thống khóa thêm 15 bộ đối chứng cùng thời điểm: random đều, random có cấu trúc và chọn theo tần suất.
